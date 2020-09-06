@@ -3,8 +3,7 @@ const bodyParser = require('body-parser');
 const connection = require('./database/connection');
 const categoriesRouter =  require('./categories/categoriesController');
 const articlesRouter = require('./articles/articlesController');
-const ModelArticle =  require('./articles/ModelArticle');
-const MoldelCaregory = require('./categories/ModelCategory');
+
 
 const app = express();
 
@@ -29,8 +28,6 @@ connection
         }).catch((error)=>{
             console.log(error);
         });
-
-
 
 
 // Routes
