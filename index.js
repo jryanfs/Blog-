@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const connection = require('./database/connection');
 const categoriesRouter =  require('./categories/categoriesController');
 const articlesRouter = require('./articles/articlesController');
-
+const modelArticle = require('./articles/ModelArticle');
+const modelCategory =  require('./categories/ModelCategory');  
+const articles = require('./articles/ModelArticle');
 
 const app = express();
 
@@ -33,6 +35,36 @@ connection
 // Routes
 app.use(categoriesRouter);
 app.use(articlesRouter);
+app.get('/',(req,res)=>{
+    modelArticle.findAll({
+        order:[
+            ['id','DESC']
+        ]
+    },{
+        include:[{
+            model: modelCategory
+        }]
+    }).then( articles =>{
 
+        return res.render('view',{ articles: articles});
+    });
+});
+
+app.get('/:slug',(req,res)=>{
+    const slug =  req.params.slug;
+    modelArticle.findOne({
+        where:{
+            slug:slug
+        }
+    }).then(article=>{
+        if(article != undefined){
+            return res.render('viewarticle',{article:article});
+        }else{
+            return res.redirect('/');
+        }
+    }).catch(()=>{
+        return res.redirect('/');
+    })
+})
 // Porta de conexão
 app.listen(3333);
