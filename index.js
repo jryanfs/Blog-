@@ -5,7 +5,7 @@ const categoriesRouter =  require('./categories/categoriesController');
 const articlesRouter = require('./articles/articlesController');
 const modelArticle = require('./articles/ModelArticle');
 const modelCategory =  require('./categories/ModelCategory');  
-const articles = require('./articles/ModelArticle');
+
 
 const app = express();
 
@@ -45,8 +45,9 @@ app.get('/',(req,res)=>{
             model: modelCategory
         }]
     }).then( articles =>{
-
-        return res.render('view',{ articles: articles});
+        modelCategory.findAll().then(categories =>{
+            return res.render('view',{articles: articles,categories:categories});
+        });
     });
 });
 
@@ -58,7 +59,9 @@ app.get('/:slug',(req,res)=>{
         }
     }).then(article=>{
         if(article != undefined){
-            return res.render('viewarticle',{article:article});
+            modelCategory.findAll().then(categories =>{
+                return res.render('viewarticle',{article: article,categories:categories});
+            });
         }else{
             return res.redirect('/');
         }
@@ -66,5 +69,29 @@ app.get('/:slug',(req,res)=>{
         return res.redirect('/');
     })
 })
+
+
+
+app.get('/categories/:slug',(req,res)=>{
+    let slug = req.params.slug;
+    modelCategory.findOne(
+        { 
+            where :{
+        slug:slug
+        },
+        include : [{model: modelArticle}]
+    }).then(category=>{
+        if(category != undefined){
+            modelCategory.findAll().then( categories =>{
+                return res.render('view',{articles:category.articles,categories:categories});
+            })
+        }else{
+            return res.redirect('/');
+        }
+    }).catch(err =>{
+        return res.redirect('/');
+    })
+
+});
 // Porta de conexão
 app.listen(3333);

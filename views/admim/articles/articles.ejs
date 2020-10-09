@@ -27,6 +27,9 @@
                         <th><%= article.slug %></th>
                         <th><%= article.category.title %></th>
                         <th>
+                            <a href="/admim/articles/edit/<%= article.id %>">
+                                <button class="btn btn-warning">Editar</button>
+                            </a>
                             <form action="/admim/articles/delete" method="POST" style ="display: inline;" onsubmit="confirmarDelete(event,this)" >
                                 <input type="hidden" 
                                         name = "id" 
