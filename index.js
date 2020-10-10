@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 const connection = require('./database/connection');
 const categoriesRouter =  require('./categories/categoriesController');
 const articlesRouter = require('./articles/articlesController');
+const userRouter = require('./user/userController');
 const modelArticle = require('./articles/ModelArticle');
 const modelCategory =  require('./categories/ModelCategory');  
-
+const modelUser = require('./user/modelUser');
 
 const app = express();
 
@@ -33,13 +34,20 @@ connection
 
 
 // Routes
+app.use(userRouter);
 app.use(categoriesRouter);
 app.use(articlesRouter);
+
+
+
+
+
 app.get('/',(req,res)=>{
     modelArticle.findAll({
         order:[
             ['id','DESC']
-        ]
+        ],
+        limit:4
     },{
         include:[{
             model: modelCategory
