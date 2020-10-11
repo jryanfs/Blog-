@@ -4,8 +4,9 @@
     
     <div class="container">
         <hr>
-        <h2>Categorias</h2>
-        <a href="/admim/categories/new" class="btn btn-primary">Criar nova categoria</a>
+        <h2 style="text-align: center;" >Categorias</h2>
+        <hr>
+        <a href="/admim/categories/new" class="btn btn-primary btn-block">Criar nova categoria</a>
         <br>
         <hr>
         <table class="table table-bordered">
@@ -34,13 +35,14 @@
 
 
 
-                            <form action="/categories/delete" method="POST" style ="display: inline;" onsubmit="confirmarDelete(event,this)" >
+                            <form action="/admim/categories/delete" method="POST" style ="display: inline;" onsubmit="confirmarDelete(event,this)" >
                                 <input type="hidden" 
                                         name = "id" 
                                         value="<%= category.id %>" 
                                 >
-                                <button class="btn btn-danger">Excluir</button>
+                                <button class="btn btn-danger">Excluir</button>                                                                        
                             </form>
+                            
                         </th>
                     </tr>
                 

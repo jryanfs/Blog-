@@ -7,12 +7,25 @@ const userRouter = require('./user/userController');
 const modelArticle = require('./articles/ModelArticle');
 const modelCategory =  require('./categories/ModelCategory');  
 const modelUser = require('./user/modelUser');
+const session = require('express-session');
 
 const app = express();
 
 // Utilizando a view engine EJS
 app.set('view engine','ejs');
 
+
+
+// Sessions
+app.use(session({
+    secret: "adivinhe",
+    cookie: {
+        maxAge:3000000000000000000000000000000
+    },
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
+}));
 // Utilizando arquivos (STATIC)
 app.use(express.static('public'));
 
@@ -41,7 +54,6 @@ app.use(articlesRouter);
 
 
 
-
 app.get('/',(req,res)=>{
     modelArticle.findAll({
         order:[
@@ -64,7 +76,8 @@ app.get('/:slug',(req,res)=>{
     modelArticle.findOne({
         where:{
             slug:slug
-        }
+        },
+        
     }).then(article=>{
         if(article != undefined){
             modelCategory.findAll().then(categories =>{
@@ -91,12 +104,12 @@ app.get('/categories/:slug',(req,res)=>{
     }).then(category=>{
         if(category != undefined){
             modelCategory.findAll().then( categories =>{
-                return res.render('view',{articles:category.articles,categories:categories});
+                return res.render('viewcategory',{articles:category.articles,categories:categories});
             })
         }else{
             return res.redirect('/');
         }
-    }).catch(err =>{
+    }).catch(() =>{
         return res.redirect('/');
     })
 

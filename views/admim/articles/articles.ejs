@@ -4,8 +4,9 @@
     
     <div class="container">
         <hr>
-        <h2>Artigos</h2>
-        <a href="/admim/articles/new" class="btn btn-primary">Criar novo artigo</a>
+        <h2 style="text-align: center;">Artigos</h2>
+        <hr>
+        <a href="/admim/articles/new" class="btn btn-primary btn-block">Criar novo artigo</a>
         <br>
         <hr>
         <table class="table table-bordered">
@@ -27,16 +28,20 @@
                         <th><%= article.slug %></th>
                         <th><%= article.category.title %></th>
                         <th>
-                            <a href="/admim/articles/edit/<%= article.id %>">
-                                <button class="btn btn-warning">Editar</button>
-                            </a>
-                            <form action="/admim/articles/delete" method="POST" style ="display: inline;" onsubmit="confirmarDelete(event,this)" >
-                                <input type="hidden" 
-                                        name = "id" 
-                                        value="<%= article.id %>" 
-                                >
-                                <button class="btn btn-danger">Excluir</button>
-                            </form>
+                            <div class="row">
+
+                                <a  class="pl-2 pr-2" href="/admim/articles/edit/<%= article.id %>">
+                                    <button class="btn btn-warning">Editar</button>
+                                </a>
+                                
+                                <form action="/admim/articles/delete" method="POST" style ="display: inline;" onsubmit="confirmarDelete(event,this)" >
+                                    <input type="hidden" 
+                                    name = "id" 
+                                    value="<%= article.id %>" 
+                                    >
+                                    <button class="btn btn-danger">Excluir</button>
+                                </form>
+                            </div>
                         </th>
                     </tr>
 

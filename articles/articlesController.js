@@ -1,11 +1,11 @@
 const express = require('express');
-const Router =  express.Router();
+const router =  express.Router();
 const modelCategory = require('../categories/ModelCategory');
 const modelArtigo =  require('./ModelArticle');
 const slugify = require('slugify');
+const admimAuth = require('../middlewares/admimAuth');
 
-
-Router.get(('/admim/articles'),(req,res)=>{
+router.get(('/admim/articles'),admimAuth,(req,res)=>{
     modelArtigo.findAll({
         include:[{
             model: modelCategory
@@ -15,18 +15,18 @@ Router.get(('/admim/articles'),(req,res)=>{
     });
 })
 
-Router.get(('/admim/articles/new'),(req,res)=>{
+router.get(('/admim/articles/new'),admimAuth,(req,res)=>{
     
     modelCategory.findAll().then(categories =>{
 
         return res.render('admim/articles/new',{categories:categories});
     }).catch(()=>{
-        return res.redirect('admim/articles');
+        return res.redirect('/admim/articles');
     });
 
 });
 
-Router.post('/admim/articles/delete',(req,res)=>{
+router.post('/admim/articles/delete',admimAuth,(req,res)=>{
     const id = req.body.id;
     if(id != undefined){
         if(!isNaN(id)){
@@ -48,7 +48,7 @@ Router.post('/admim/articles/delete',(req,res)=>{
 });
 
 
-Router.post('/admim/articles/save',(req,res)=>{
+router.post('/admim/articles/save',admimAuth,(req,res)=>{
     let title = req.body.title;
     let body = req.body.body;
     let category = req.body.category;
@@ -71,7 +71,7 @@ Router.post('/admim/articles/save',(req,res)=>{
 
 
 
-Router.get('/admim/articles/edit/:id',(req,res)=>{
+router.get('/admim/articles/edit/:id',admimAuth,(req,res)=>{
     let id = req.params.id;
 
     modelArtigo.findByPk(id).then(article =>{
@@ -89,7 +89,7 @@ Router.get('/admim/articles/edit/:id',(req,res)=>{
 });
 
 
-Router.post('/admim/articles/update',(req,res)=>{
+router.post('/admim/articles/update',admimAuth,(req,res)=>{
     let id = req.body.id;
     let title = req.body.title;
     let body = req.body.body;
@@ -112,7 +112,7 @@ Router.post('/admim/articles/update',(req,res)=>{
 
 });
 
-Router.get('/admim/articles/page/:num',(req,res)=>{
+router.get('/admim/articles/page/:num',(req,res)=>{
     let page = req.params.num;
     let offset = 0;
 
@@ -153,4 +153,4 @@ Router.get('/admim/articles/page/:num',(req,res)=>{
 });
 
 
-module.exports = Router;
+module.exports = router;

@@ -1,17 +1,18 @@
 const express = require('express');
-const  Router = express.Router(); 
+const  router = express.Router(); 
 const slugify = require('slugify');
 const ModelCategory =  require('./ModelCategory');
+const admimAuth = require('../middlewares/admimAuth');
 
 
 
 
-Router.get('/admim/categories/new',(req,res)=>{
-    return res.render('admim/categories/new');
+router.get('/admim/categories/new',admimAuth,(req,res)=>{
+    return res.render('/admim/categories/new');
 });
 
 
-Router.post('/categories/save',(req,res)=>{
+router.post('/admim/categories/save',admimAuth,(req,res)=>{
     let title = req.body.title;
 
     if(title != undefined){
@@ -27,7 +28,7 @@ Router.post('/categories/save',(req,res)=>{
     }
 });
 
-Router.get('/admim/categories',(req,res)=>{
+router.get('/admim/categories',admimAuth,(req,res)=>{
 
     ModelCategory.findAll().then(categories=>{
 
@@ -36,7 +37,7 @@ Router.get('/admim/categories',(req,res)=>{
 
 });
 
-Router.post('/categories/delete',(req,res)=>{
+router.post('/admim/categories/delete',admimAuth,(req,res)=>{
     const id = req.body.id;
     if(id != undefined){
         if(!isNaN(id)){
@@ -46,6 +47,8 @@ Router.post('/categories/delete',(req,res)=>{
                 }
             }).then(()=>{
                 return res.redirect("/admim/categories");
+            }).catch(()=>{
+                return res.redirect("/admim/categories")
             });
 
         }else{
@@ -57,7 +60,7 @@ Router.post('/categories/delete',(req,res)=>{
 });
 
 
-Router.get('/admim/categories/edit/:id',(req,res)=>{
+router.get('/admim/categories/edit/:id',admimAuth,(req,res)=>{
     let id = req.params.id;
     
     if(isNaN(id)){
@@ -76,7 +79,7 @@ Router.get('/admim/categories/edit/:id',(req,res)=>{
 
 
 
-Router.post('/admim/categories/update',(req,res)=>{
+router.post('/admim/categories/update',admimAuth,(req,res)=>{
         const id = req.body.id;
         const title = req.body.title;
 
@@ -88,12 +91,12 @@ Router.post('/admim/categories/update',(req,res)=>{
     }).then(()=>{
             return res.redirect('/admim/categories');
         }).catch((err)=>{
-
+            return res.redirect('/admim/categories');
         });
 
 });
 
 
 
-module.exports = Router;
+module.exports = router;
 
